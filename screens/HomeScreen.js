@@ -11,18 +11,17 @@ const HomeScreen = () => {
 
   const [arr, setArr] = useState([]);
 
+  function handleArr(newValue) {
+    setArr(newValue);
+  }
+
   useEffect(() => {
-    const getUsers = async () => {
-      const res = await axios.get('http://192.168.43.204:5000/getUsers')
-      const users = await res.json()
-      console.log(users)
-      console.log('hi')
-      setArr(users)
-    }
-
-    getUsers()
+    fetch('http://192.168.72.146:5000/getUsers').then(data => {
+      return data.json().then(data => {
+        setArr(data);
+      })
+    })
     }, [])
-
 
   return (
     <SafeAreaView>
@@ -38,11 +37,11 @@ const HomeScreen = () => {
           {
             arr.map((user) => {
               return (
-                <Details key={user.id} name={user.name} address = {user.address} />
+                <Details key={user.id} id={user.id} name={user.name} address = {user.address} handleArr = {handleArr} arr = {arr} />
               )
             })
           }
-        </View>
+        </View> 
           
       </ScrollView>
     </SafeAreaView>
