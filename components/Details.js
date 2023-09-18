@@ -1,5 +1,5 @@
 import { View, Text, Pressable, TouchableOpacity } from "react-native";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -7,13 +7,13 @@ import {
 import axios from "axios";
 
 const Details = ({ name, address, id, handleArr, arr }) => {
-  
+
   const [del, setDel] = useState(1);
   const [pick, setPick] = useState(1);
 
-  async function handleDone(){
+  async function handleDone() {
     try {
-      await axios.post('http://192.168.72.146:5000/createOrder', { id, delivered: del, picked: pick })
+      await axios.post('http://3.85.77.226:5000/createOrder', { id, delivered: del, picked: pick })
     } catch (error) {
       console.log(error);
     }
@@ -36,11 +36,11 @@ const Details = ({ name, address, id, handleArr, arr }) => {
           <Text className="text-3xl">Delivered:</Text>
         </View>
         <View className="flex flex-row bg-orange-500 rounded-md ml-6 justify-around items-center text-white text-xl py-1 px-2" style={{ width: wp(25) }}>
-          <Pressable onPress={()=>{setDel(prev => prev - 1)}}>
+          <Pressable onPress={() => { setDel(prev => prev - 1) }}>
             <Text className='text-3xl text-white'>-</Text>
           </Pressable>
           <Text className='text-xl text-white'>{del}</Text>
-          <Pressable onPress={()=>{setDel(prev => prev + 1)}}>
+          <Pressable onPress={() => { setDel(prev => prev + 1) }}>
             <Text className='text-2xl text-white'>+</Text>
           </Pressable>
         </View>
@@ -51,21 +51,21 @@ const Details = ({ name, address, id, handleArr, arr }) => {
           <Text className="text-3xl">Picked Up:</Text>
         </View>
         <View className="flex flex-row bg-orange-500 rounded-md ml-4 justify-around items-center text-white text-xl py-1 px-2" style={{ width: wp(25) }}>
-          <Pressable onPress={()=>{setPick(prev => prev - 1)}}>
+          <Pressable onPress={() => { setPick(prev => prev - 1) }}>
             <Text className='text-3xl text-white'>-</Text>
           </Pressable>
           <Text className='text-xl text-white'>{pick}</Text>
-          <Pressable onPress={()=>{setPick(prev => prev + 1)}}>
+          <Pressable onPress={() => { setPick(prev => prev + 1) }}>
             <Text className='text-2xl text-white'>+</Text>
           </Pressable>
         </View>
       </View>
 
       <View className='flex items-end'>
-        <TouchableOpacity onPress={() => { handleDone(); handleChange(); }}  className="py-2 bg-green-400 rounded-md mt-8" style={{width:wp(25)}}>
-        <Text className='text-white text-2xl text-center'>Done</Text>
+        <TouchableOpacity onPress={() => { handleDone(); handleChange(); }} className="py-2 bg-green-400 rounded-md mt-8" style={{ width: wp(25) }}>
+          <Text className='text-white text-2xl text-center'>Done</Text>
         </TouchableOpacity>
-        </View>
+      </View>
     </View>
   );
 };
