@@ -13,7 +13,7 @@ const Details = ({ name, address, id, handleArr, arr }) => {
 
   async function handleDone() {
     try {
-      await axios.post('http://3.85.77.226:5000/createOrder', { id, delivered: del, picked: pick })
+      await axios.post('http://54.159.231.59:5000/createOrder', { id, delivered: del, picked: pick })
     } catch (error) {
       console.log(error);
     }

@@ -14,7 +14,7 @@ const HomeScreen = () => {
   }
 
   useEffect(() => {
-    fetch('http://3.85.77.226:5000/getUsers').then(data => {
+    fetch('http://54.159.231.59:5000/getUsers').then(data => {
       return data.json().then(data => {
         setArr(data);
       })
