@@ -1,21 +1,38 @@
-import { View, Text, ScrollView, Image, Pressable } from 'react-native'
+import { View, Text, ScrollView, Image, Pressable, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import logo from '../assets/images/logo1.png'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Details from '../components/Details';
+import axios from 'axios';
 
 const HomeScreen = () => {
 
   const [arr, setArr] = useState([]);
-  const [login, setLogin] = useState(false)
+  const [login, setLogin] = useState(true);
 
   function handleArr(newValue) {
     setArr(newValue);
   }
 
+  async function handleLogin() {
+    try {
+      await axios.post('http://192.168.72.146:5000/login')
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function handleLogout() {
+    try {
+      await axios.post('http://192.168.72.146:5000/logout')
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    fetch('http://192.168.43.204:5000/getUsers').then(data => {
+    fetch('http://192.168.72.146:5000/getUsers').then(data => {
       return data.json().then(data => {
         setArr(data);
       })
@@ -40,9 +57,17 @@ const HomeScreen = () => {
               )
             })
           }
-        </View> : <Pressable className="ml-7 p-2 bg-green-400">
-            <Text className='text-white'>Login</Text>
-        </Pressable>}
+          <View>
+          <TouchableOpacity onPress={handleLogout} className="mx-7 py-3 bg-orange-500 rounded-xl my-8" style={{width:wp(85)}}>
+            <Text className='text-white text-3xl text-center'>Logout</Text>
+            </TouchableOpacity>
+          </View>
+        </View> :
+          <TouchableOpacity onPress={handleLogin} className="mx-7 py-3 bg-green-400 rounded-xl mt-5" style={{width:wp(85)}}>
+            <Text className='text-white text-3xl text-center'>Login</Text>
+            </TouchableOpacity>
+          
+        }
 
       </ScrollView>
     </SafeAreaView>
