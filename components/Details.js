@@ -6,7 +6,7 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 
-const Details = ({ name, address, id, handleArr, arr }) => {
+const Details = ({ name, address, id, userId, handleArr, data }) => {
 
   const [del, setDel] = useState(1);
   const [pick, setPick] = useState(1);
@@ -14,14 +14,14 @@ const Details = ({ name, address, id, handleArr, arr }) => {
 
   async function handleDone() {
     try {
-      await axios.post('http://192.168.72.146:5000/createOrder', { id, delivered: del, picked: pick })
+      await axios.post('http://192.168.43.204:5000/createOrder', { id, userId, delivered: del, picked: pick })
     } catch (error) {
       console.log(error);
     }
   }
 
   function handleChange() {
-    const result = arr.filter((user) => user.id != id);
+    const result = data.filter((user) => user.userId != userId);
     handleArr(result);
   }
 
@@ -36,8 +36,8 @@ const Details = ({ name, address, id, handleArr, arr }) => {
           <Text className='text-lg text-white font-semibold'>Show Contact</Text>
         </TouchableOpacity>
       </View>
-      
-      <Text className='text-lg' style={{width:wp(50)}}>{address}</Text>
+
+      <Text className='text-lg' style={{ width: wp(50) }}>{address}</Text>
       <View className="flex flex-row items-center mt-7">
         <View>
           <Text className="text-2xl mr-2">Delivered:</Text>
@@ -69,7 +69,7 @@ const Details = ({ name, address, id, handleArr, arr }) => {
       </View>
 
       <View className='flex flex-row justify-between items-center'>
-        <Text className={`text-xl mt-7 ${mob ?'block':'hidden'}`}>Mob No: 1234567890</Text>
+        <Text className={`text-xl mt-7 ${mob ? 'block' : 'hidden'}`}>Mob No: 1234567890</Text>
         <TouchableOpacity onPress={() => { handleDone(); handleChange(); }} className="py-2 px-3 bg-green-400 rounded-md mt-8">
           <Text className='text-white text-2xl text-center'>Done</Text>
         </TouchableOpacity>
