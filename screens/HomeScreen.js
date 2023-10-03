@@ -7,9 +7,8 @@ import Details from '../components/Details';
 import axios from 'axios';
 
 const HomeScreen = () => {
-
   const [arr, setArr] = useState([]);
-  const [login, setLogin] = useState(true);
+  const [login, setLogin] = useState(false);
 
   function handleArr(newValue) {
     setArr(newValue);
@@ -17,7 +16,8 @@ const HomeScreen = () => {
 
   async function handleLogin() {
     try {
-      await axios.post('http://192.168.72.146:5000/login')
+      await axios.post('http://75.101.246.39:5000/login')
+      setLogin(true)
     } catch (error) {
       console.log(error);
     }
@@ -25,14 +25,24 @@ const HomeScreen = () => {
 
   async function handleLogout() {
     try {
-      await axios.post('http://192.168.72.146:5000/logout')
+      await axios.post('http://75.101.246.39:5000/logout')
+      setLogin(false)
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
-    fetch('http://192.168.72.146:5000/getUsers').then(data => {
+    const getLogin = async () => {
+      try {
+        const { data } = await axios.get('http://75.101.246.39:5000/getLogin')
+        setLogin(data[0].action == 'logout' ? false : true)
+      } catch (error) {
+        console.log()
+      }
+    }
+    getLogin()
+    fetch('http://75.101.246.39:5000/getUsers').then(data => {
       return data.json().then(data => {
         setArr(data);
       })
@@ -51,24 +61,22 @@ const HomeScreen = () => {
         </View>
         {login ? <View className='mt-8'>
           {
-            arr.map((user) => {
+            arr.map((data) => {
               return (
-                <Details key={user.id} id={user.id} name={user.name} address={user.address} handleArr={handleArr} arr={arr} />
+                <Details key={data.userId} userId={data.userId} id={data.id} name={data.user.name} address={data.user.address} handleArr={handleArr} data={arr} />
               )
             })
           }
           <View>
-          <TouchableOpacity onPress={handleLogout} className="mx-7 py-3 bg-orange-500 rounded-xl my-8" style={{width:wp(85)}}>
-            <Text className='text-white text-3xl text-center'>Logout</Text>
+            <TouchableOpacity onPress={handleLogout} className="mx-7 py-3 bg-orange-500 rounded-xl my-8" style={{ width: wp(85) }}>
+              <Text className='text-white text-3xl text-center'>Logout</Text>
             </TouchableOpacity>
           </View>
         </View> :
-          <TouchableOpacity onPress={handleLogin} className="mx-7 py-3 bg-green-400 rounded-xl mt-5" style={{width:wp(85)}}>
+          <TouchableOpacity onPress={handleLogin} className="mx-7 py-3 bg-green-400 rounded-xl mt-5" style={{ width: wp(85) }}>
             <Text className='text-white text-3xl text-center'>Login</Text>
-            </TouchableOpacity>
-          
+          </TouchableOpacity>
         }
-
       </ScrollView>
     </SafeAreaView>
   )
