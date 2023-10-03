@@ -14,7 +14,7 @@ const Details = ({ name, address, id, userId, handleArr, data }) => {
 
   async function handleDone() {
     try {
-      await axios.post('http://192.168.43.204:5000/createOrder', { id, userId, delivered: del, picked: pick })
+      await axios.post('http://75.101.246.39:5000/createOrder', { id, userId, delivered: del, picked: pick })
     } catch (error) {
       console.log(error);
     }

@@ -16,7 +16,7 @@ const HomeScreen = () => {
 
   async function handleLogin() {
     try {
-      await axios.post('http://192.168.43.204:5000/login')
+      await axios.post('http://75.101.246.39:5000/login')
       setLogin(true)
     } catch (error) {
       console.log(error);
@@ -25,7 +25,7 @@ const HomeScreen = () => {
 
   async function handleLogout() {
     try {
-      await axios.post('http://192.168.43.204:5000/logout')
+      await axios.post('http://75.101.246.39:5000/logout')
       setLogin(false)
     } catch (error) {
       console.log(error);
@@ -35,14 +35,14 @@ const HomeScreen = () => {
   useEffect(() => {
     const getLogin = async () => {
       try {
-        const { data } = await axios.get('http://192.168.43.204:5000/getLogin')
+        const { data } = await axios.get('http://75.101.246.39:5000/getLogin')
         setLogin(data[0].action == 'logout' ? false : true)
       } catch (error) {
         console.log()
       }
     }
     getLogin()
-    fetch('http://192.168.43.204:5000/getUsers').then(data => {
+    fetch('http://75.101.246.39:5000/getUsers').then(data => {
       return data.json().then(data => {
         setArr(data);
       })
