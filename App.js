@@ -24,3 +24,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+ // "extra": {
+    //   "eas": {
+    //     "projectId": "98e7bc70-8e3d-4cb3-ac5e-f3201065f65c"
+    //   }
+    // }
