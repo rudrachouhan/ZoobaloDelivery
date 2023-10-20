@@ -6,7 +6,7 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 
-const Details = ({ name, address, id, userId, handleArr, data }) => {
+const Details = ({ name, address, id, userId, handleArr, data,handleShow }) => {
 
   const [del, setDel] = useState(1);
   const [pick, setPick] = useState(1);
@@ -17,6 +17,9 @@ const Details = ({ name, address, id, userId, handleArr, data }) => {
       await axios.post('http://75.101.246.39:5000/createOrder', { id, userId, delivered: del, picked: pick })
     } catch (error) {
       console.log(error);
+    }
+    finally {
+      handleShow();
     }
   }
 
@@ -31,7 +34,7 @@ const Details = ({ name, address, id, userId, handleArr, data }) => {
       style={{ width: wp(90) }}
     >
       <View className='flex flex-row justify-between items-center mb-2'>
-        <Text className="text-3xl font-semibold">{name}</Text>
+        <Text className="text-3xl font-semibold" style={{width:wp(45)}}>{name}</Text>
         <TouchableOpacity onPress={() => setMob(true)} className='py-2 px-3 rounded-lg bg-orange-500'>
           <Text className='text-lg text-white font-semibold'>Show Contact</Text>
         </TouchableOpacity>
