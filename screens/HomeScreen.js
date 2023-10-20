@@ -98,7 +98,7 @@ const HomeScreen = () => {
           {show &&
             arr.map((data) => {
               return (
-                <Details key={data.userId} userId={data.userId} id={data.id} name={data.user.name} address={data.user.address} handleArr={handleArr} data={arr} handleShow={handleShow} />
+                <Details key={data.userId} userId={data.userId} id={data.id} name={data.user.name} mobile={data.user.mobile} due={data.user.due} address={data.user.address} handleArr={handleArr} data={arr} handleShow={handleShow} />
               )
             })
           }
