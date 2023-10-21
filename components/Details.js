@@ -6,7 +6,7 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 
-const Details = ({ name, address, id, userId, handleArr, data,handleShow }) => {
+const Details = ({ name, address, id, userId, handleArr, data, mobile, due, results, handleResult }) => {
 
   const [del, setDel] = useState(1);
   const [pick, setPick] = useState(1);
@@ -18,14 +18,17 @@ const Details = ({ name, address, id, userId, handleArr, data,handleShow }) => {
     } catch (error) {
       console.log(error);
     }
-    finally {
-      handleShow();
-    }
   }
 
   function handleChange() {
-    const result = data.filter((user) => user.userId != userId);
-    handleArr(result);
+    console.log(data, "data")
+    console.log(results, "result")
+    const dataResult = data.filter((user) => user.userId != userId);
+    handleArr(dataResult);
+    if (results) {
+      const result = results.filter((result) => result.userId != userId)
+      handleResult(result)
+    }
   }
 
   return (
@@ -71,8 +74,12 @@ const Details = ({ name, address, id, userId, handleArr, data,handleShow }) => {
         </View>
       </View>
 
+      <View className='mt-7 mb-2'>
+        <Text className='font-bold text-xl'>Due tiffin: {due}</Text>
+      </View>
+
       <View className='flex flex-row justify-between items-center'>
-        <Text className={`text-xl mt-7 ${mob ? 'block' : 'hidden'}`}>Mob No: 1234567890</Text>
+        <Text className={`text-xl mt-7 ${mob ? 'block' : 'hidden'}`}>Mob No: {mobile}</Text>
         <TouchableOpacity onPress={() => { handleDone(); handleChange(); }} className="py-2 px-3 bg-green-400 rounded-md mt-8">
           <Text className='text-white text-2xl text-center'>Done</Text>
         </TouchableOpacity>

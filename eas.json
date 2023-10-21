@@ -16,7 +16,8 @@
     "preview3": {
       "developmentClient": true
     },
-    "production": {}
+    "production": {
+    }
   },
   "submit": {
     "production": {}
