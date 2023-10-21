@@ -6,7 +6,7 @@ import {
 } from "react-native-responsive-screen";
 import axios from "axios";
 
-const Details = ({ name, address, id, userId, handleArr, data, handleShow, mobile, due }) => {
+const Details = ({ name, address, id, userId, handleArr, data, mobile, due, results, handleResult }) => {
 
   const [del, setDel] = useState(1);
   const [pick, setPick] = useState(1);
@@ -18,14 +18,17 @@ const Details = ({ name, address, id, userId, handleArr, data, handleShow, mobil
     } catch (error) {
       console.log(error);
     }
-    finally {
-      handleShow();
-    }
   }
 
   function handleChange() {
-    const result = data.filter((user) => user.userId != userId);
-    handleArr(result);
+    console.log(data, "data")
+    console.log(results, "result")
+    const dataResult = data.filter((user) => user.userId != userId);
+    handleArr(dataResult);
+    if (results) {
+      const result = results.filter((result) => result.userId != userId)
+      handleResult(result)
+    }
   }
 
   return (

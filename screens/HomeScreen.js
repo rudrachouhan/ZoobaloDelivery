@@ -2,12 +2,14 @@ import {
   View,
   Text,
   ScrollView,
+  Easing,
   Image,
   Pressable,
   TouchableOpacity,
   TextInput,
+  Animated,
 } from "react-native";
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import logo from "../assets/images/logo1.png";
 import {
@@ -17,31 +19,33 @@ import {
 import Details from "../components/Details";
 import axios from "axios";
 import { AntDesign } from "@expo/vector-icons";
-import { Ionicons } from "@expo/vector-icons";
 
 const HomeScreen = () => {
 
   const [arr, setArr] = useState([]);
   const [login, setLogin] = useState(false);
   const [searchinput, setSearchinput] = useState("");
-  const [show, setShow] = useState(true);
   const [results, setResults] = useState([]);
-  const [initialData, setInitialData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true)
 
-  
+  const rotateValueHolder = new Animated.Value(0)
 
-  const goBack = () => {
-    setShow(true);
-    setResults(initialData);
-    setSearchinput("");
+  const startImageRotateFunction = () => {
+    Animated.loop(Animated.timing(rotateValueHolder, {
+      toValue: 1,
+      duration: 1000,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    })).start();
   };
+
+  startImageRotateFunction()
 
   function handleArr(newValue) {
     setArr(newValue);
   }
-
-  function handleShow() {
-    setShow(true);
+  function handleResult(newValue) {
+    setResults(newValue);
   }
 
   async function handleLogin() {
@@ -76,15 +80,15 @@ const HomeScreen = () => {
       return data.json().then(data => {
         setArr(data);
         setResults(data);
-        setInitialData(data);
+        setIsLoading(false)
       })
     }).catch(error => { console.log(error) })
-  
+
   }, []);
 
   useEffect(() => {
     if (results != undefined) {
-      const finalResults = results.filter((result) => {
+      const finalResults = arr.filter((result) => {
         return result.user.name.toLowerCase().indexOf(searchinput.toLowerCase()) !== -1;
       });
 
@@ -95,10 +99,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <View className="flex flex-row items-center">
-          <Pressable onPress={goBack} className="mr-16 mb-7 ml-4">
-            <Ionicons name="arrow-back" size={40} color="black" />
-          </Pressable>
+        <View className="flex flex-row justify-center items-center">
           <Image
             source={logo}
             style={{ width: wp(40) }}
@@ -116,10 +117,9 @@ const HomeScreen = () => {
             value={searchinput}
             placeholder="Search a User"
             onChangeText={(e) => setSearchinput(e)}
-            onPressIn={() => setShow(false)}
           ></TextInput>
-          <Pressable>
-            <AntDesign name="search1" size={24} color="black" />
+          <Pressable onPress={() => { setSearchinput("") }}>
+            <AntDesign name="close" size={24} color="black" />
           </Pressable>
         </View>
         <View className="mt-8 ml-3">
@@ -130,9 +130,27 @@ const HomeScreen = () => {
             Delivery<Text className="text-green-400">MATE</Text>
           </Text>
         </View>
+        {isLoading && <Animated.View
+          className='mt-10'
+          style={{
+            alignSelf: "center",
+            transform:
+              [
+                {
+                  rotate: rotateValueHolder.interpolate(
+                    {
+                      inputRange: [0, 1],
+                      outputRange: ['0deg', '360deg'],
+                    }
+                  )
+                }
+              ],
+          }}>
+          <AntDesign name="loading1" size={32} color="black" />
+        </Animated.View>}
         {login ? (
           <View className="mt-8">
-            {show &&
+            {!searchinput &&
               arr.map((data) => {
                 return (
                   <Details
@@ -140,14 +158,15 @@ const HomeScreen = () => {
                     userId={data.userId}
                     id={data.id}
                     name={data.user.name}
+                    mobile={data.user.mobile}
+                    due={data.user.due}
                     address={data.user.address}
                     handleArr={handleArr}
                     data={arr}
-                    handleShow={handleShow}
                   />
                 );
               })}
-            {!show && (
+            {searchinput && (
               <View>
                 {results.map((data) => {
                   return (
@@ -156,10 +175,13 @@ const HomeScreen = () => {
                       userId={data.userId}
                       id={data.id}
                       name={data.user.name}
+                      mobile={data.user.mobile}
+                      due={data.user.due}
                       address={data.user.address}
                       handleArr={handleArr}
                       data={arr}
-                      handleShow={handleShow}
+                      results={results}
+                      handleResult={handleResult}
                     />
                   );
                 })}
